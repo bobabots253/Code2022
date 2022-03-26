@@ -139,8 +139,8 @@ public class RobotContainer {
         operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climb(-0.5), climber)).whenReleased(new InstantCommand(() -> climber.stop()));
         operator_DPAD_LEFT.whileHeld(new RunCommand(() -> arm.setOpenLoop(0.05), arm)).whenReleased(new RunCommand(()->arm.setOpenLoop(0.0)));
         operator_DPAD_RIGHT.whileHeld(new RunCommand(() -> arm.setOpenLoop(-0.05), arm)).whenReleased(new RunCommand(()->arm.setOpenLoop(0.0)));
-        /*operator_VIEW.whileHeld(new RunCommand(() -> climber.setLeftMotor(0.5), climber));
-        operator_MENU.whileHeld(new RunCommand(() -> climber.setRightMotor(0.5), climber));*/
+        operator_VIEW.whileHeld(new RunCommand(() -> climber.setLeftMotor(0.5), climber)).whenReleased(climber::stop);
+        operator_MENU.whileHeld(new RunCommand(() -> climber.setRightMotor(0.5), climber)).whenReleased(climber::stop);
     }
 
     public static Command getAutonomousCommand(Auto.Selection selectedAuto) { //TODO: change auto based on selected strategy
