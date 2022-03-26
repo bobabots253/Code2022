@@ -98,6 +98,8 @@ public class RobotContainer {
         limelight = NetworkTableInstance.getDefault().getTable("limelight-intake");
         setLEDMode(LEDMode.OFF);
 
+        drivetrain.resetEncoders();
+
         bindOI();
     }
     
