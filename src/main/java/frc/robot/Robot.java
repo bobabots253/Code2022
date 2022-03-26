@@ -109,7 +109,6 @@ public class Robot extends TimedRobot {
     for(int i = 0; i < autoGroup1.length; i++) {
       autoGroup1[i] = initializeTrajectory(auto1JSON[i]);
     }
-    Drivetrain.getInstance().resetEncoders();
     //Arm.getInstance().resetEncoders();
   }
 
