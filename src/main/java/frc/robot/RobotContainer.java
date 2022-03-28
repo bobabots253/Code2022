@@ -105,7 +105,7 @@ public class RobotContainer {
     
 
     private void bindOI() {
-        driver_RB.whenHeld(new RunCommand(() -> arm.setOpenLoop(0.05), arm).withTimeout(1.7).andThen(arm::stopArm, arm))
+        driver_RB.whenHeld(new RunCommand(() -> arm.setOpenLoop(0.05), arm).withTimeout(1.7))
             .whileHeld(new RunCommand(() -> intake.intake(0.7), intake)
                 .alongWith(new RunCommand(() -> intake.setConveyor(0.3))))
             .whenReleased(new RunCommand(() -> arm.setOpenLoop(-0.05), arm).withTimeout(1.7)
@@ -115,7 +115,7 @@ public class RobotContainer {
         driver_X.whileHeld(new HubTrack());
 
         for(JoystickButton button : Set.of(driver_B, operator_X)) {
-            button.whenHeld(new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1.7).andThen(arm::stopArm)) //Can reimplement with StartEndCommand
+            button.whenHeld(new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1.7)) //Can reimplement with StartEndCommand
                 .whileHeld(new RunCommand(() -> intake.intake(-0.7), intake)
                     .alongWith(new RunCommand(() -> intake.setConveyor(-0.3)))
                     .alongWith(new RunCommand(() -> shooter.setStagingMotor(-0.2))))
