@@ -108,9 +108,11 @@ public class RobotContainer {
         driver_RB.whenHeld(new RunCommand(() -> arm.setOpenLoop(0.05), arm).withTimeout(1.7))
             .whileHeld(new RunCommand(() -> intake.intake(0.7), intake)
                 .alongWith(new RunCommand(() -> intake.setConveyor(0.3))))
-            .whenReleased(new RunCommand(() -> arm.setOpenLoop(-0.05), arm).withTimeout(1.7)
-                .andThen(arm::stopArm, arm))
-            .whenReleased(new InstantCommand(() -> intake.stopIntake()));
+            .whenReleased(new RunCommand(() -> {
+                arm.setOpenLoop(-0.05);
+                intake.intake(0.0);
+            }, arm, intake).withTimeout(1.7)
+                .andThen(arm::stopArm, arm).alongWith(new RunCommand(() -> intake.stopIntake())));
         //driver_LB.whileHeld(new SillyShoot());
         driver_X.whileHeld(new HubTrack());
 
