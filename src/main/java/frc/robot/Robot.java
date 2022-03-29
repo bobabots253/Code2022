@@ -143,7 +143,7 @@ public class Robot extends TimedRobot {
         break;
       case INTAKE:
         double conveyorPower = RobotContainer.getThrottle() * DriverConstants.kDriveSens;
-        Intake.getInstance().intake(conveyorPower * 1.5);
+        Intake.getInstance().intake(conveyorPower / DriverConstants.kDriveSens * 0.7);
         Intake.getInstance().setConveyor(conveyorPower);
         break;
       case SHOOTER:
