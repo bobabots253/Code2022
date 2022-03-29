@@ -113,7 +113,7 @@ public class RobotContainer {
                 intake.intake(0.0);
                 intake.setConveyor(0.3);
             }, arm, intake).withTimeout(1.7)
-                .andThen(arm::stopArm, arm).alongWith(new InstantCommand(() -> intake.stopIntake())));
+                .andThen(arm::stopArm, arm).andThen(new InstantCommand(() -> intake.stopIntake())));
         //driver_LB.whileHeld(new SillyShoot());
         driver_X.whileHeld(new HubTrack());
 
