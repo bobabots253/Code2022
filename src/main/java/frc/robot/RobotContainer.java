@@ -107,12 +107,12 @@ public class RobotContainer {
     private void bindOI() {
         driver_RB.whenHeld(new RunCommand(() -> arm.setOpenLoop(0.05), arm).withTimeout(1.7))
             .whileHeld(new RunCommand(() -> {
-                intake.intake(0.7);
+                intake.intake(0.9);
                 intake.setConveyor(0.3);
             }, intake))
             .whenReleased(new RunCommand(() -> {
                 arm.setOpenLoop(-0.05);
-                intake.intake(0.5);
+                // intake.intake(0.7);
             }, arm, intake).withTimeout(0.5).andThen(new RunCommand(() ->{
                 intake.intake(0.0);
                 intake.setConveyor(0.3);
