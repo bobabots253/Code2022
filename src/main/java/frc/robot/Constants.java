@@ -120,7 +120,7 @@ public class Constants {
 
     }
     public static class ClimbConstants {
-        public static final int rightMotor = 6, leftMotor = 5; //TODO: test which is which
+        public static final int rightMotor = 5, leftMotor = 6; 
         /* PID constants */
         public static final double kP = 0;
         public static final double kI = 0;
