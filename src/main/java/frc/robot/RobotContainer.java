@@ -106,14 +106,26 @@ public class RobotContainer {
 
     private void bindOI() {
         driver_RB.whenHeld(new RunCommand(() -> arm.setOpenLoop(0.05), arm).withTimeout(1.7))
-            .whileHeld(new RunCommand(() -> intake.intake(0.7), intake)
-                .alongWith(new RunCommand(() -> intake.setConveyor(0.3))))
+            .whileHeld(new RunCommand(() -> {
+                intake.intake(0.7);
+                intake.setConveyor(0.3);
+            }, intake))
             .whenReleased(new RunCommand(() -> {
                 arm.setOpenLoop(-0.05);
                 intake.intake(0.0);
                 intake.setConveyor(0.3);
             }, arm, intake).withTimeout(1.7)
-                .andThen(arm::stopArm, arm).andThen(new InstantCommand(() -> intake.stopIntake())));
+                .andThen(arm::stopArm, arm).andThen(intake::stopIntake));
+        
+        driver_Y.whenHeld(new RunCommand(() -> arm.setOpenLoop(-0.05), arm).withTimeout(1.7))
+            .whileHeld(new RunCommand(() -> {
+                intake.intake(0.9);
+                intake.setConveyor(0.3);
+            }, intake))
+            .whenReleased(new InstantCommand(() -> {
+                arm.stopArm();
+                intake.stopIntake();
+            }, arm, intake));
         //driver_LB.whileHeld(new SillyShoot());
         driver_X.whileHeld(new HubTrack());
 
@@ -142,8 +154,8 @@ public class RobotContainer {
         operator_B.whileHeld(new RunCommand(() -> intake.setConveyor(0.5), intake)).whenReleased(new InstantCommand(()-> intake.stopIntake(), intake));
         operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climb(0.67), climber)).whenReleased(new InstantCommand(() -> climber.stop()));
         operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climb(-0.67), climber)).whenReleased(new InstantCommand(() -> climber.stop()));
-        operator_DPAD_LEFT.whileHeld(new RunCommand(() -> arm.setOpenLoop(0.05), arm)).whenReleased(new RunCommand(()->arm.setOpenLoop(0.0)));
-        operator_DPAD_RIGHT.whileHeld(new RunCommand(() -> arm.setOpenLoop(-0.05), arm)).whenReleased(new RunCommand(()->arm.setOpenLoop(0.0)));
+        operator_DPAD_LEFT.whileHeld(new RunCommand(() -> arm.setOpenLoop(0.06), arm)).whenReleased(new InstantCommand(()->arm.setOpenLoop(0.0)));
+        operator_DPAD_RIGHT.whileHeld(new RunCommand(() -> arm.setOpenLoop(-0.06), arm)).whenReleased(new InstantCommand(()->arm.setOpenLoop(0.0)));
         operator_VIEW.whileHeld(new RunCommand(() -> climber.setLeftMotor(0.67), climber)).whenReleased(climber::stop);
         operator_MENU.whileHeld(new RunCommand(() -> climber.setRightMotor(0.67), climber)).whenReleased(climber::stop);
     }
