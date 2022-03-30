@@ -94,7 +94,7 @@ public class Constants {
 
     public static class ShooterConstants {
         /* PID constants */
-        public static final double kP = 0;
+        public static final double kP = 0.32381;
         public static final double kI = 0;
         public static final double kD = 0; // :|
 
