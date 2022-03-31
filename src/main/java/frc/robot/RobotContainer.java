@@ -1,5 +1,6 @@
 package frc.robot;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.function.BiConsumer;
 
@@ -14,6 +15,7 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.DriveXMeters;
 import frc.robot.commands.HubTrack;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.SillyDriveX;
 import frc.robot.commands.SillyShoot;
 import frc.robot.commands.SmartShoot;
 import frc.robot.commands.StagingQueue;
@@ -193,16 +195,18 @@ public class RobotContainer {
             auto = Auto.getSillyAuto();
         } else if(selectedAuto == Auto.Selection.COMPLEX) {
             auto = new SequentialCommandGroup(
-                Auto.getSillyAuto(),
-                new RunCommand(() -> {
+                new SillyDriveX(Units.InchesToMeters(33.8), true),
+                new HubTrack().withTimeout(3.0),
+                new SillyShoot().withTimeout(3),
+                new ParallelCommandGroup(new RunCommand(() -> {
                     arm.setOpenLoop(0.05);
                     intake.intake(0.9);
                     intake.setConveyor(0.3);
                 }, arm, intake),
-                getPathweaverCommand(Robot.autoGroup1[0]),
+                    getPathweaverCommand(Robot.autoGroup1[0])),
                 getPathweaverCommand(Robot.autoGroup1[1]),
                 getPathweaverCommand(Robot.autoGroup1[2]),
-                new RunCommand(() -> {
+                new InstantCommand(() -> {
                     arm.stopArm();
                     intake.stopIntake();
                 }, arm, intake),

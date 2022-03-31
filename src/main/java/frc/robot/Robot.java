@@ -27,6 +27,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -75,6 +76,7 @@ public class Robot extends TimedRobot {
     } catch (IOException e) {
       System.out.println("silly pathweaver bad");
       e.printStackTrace();
+      DriverStation.reportError("PATH FAILED", e.getStackTrace());
     }
     return t;
   }
