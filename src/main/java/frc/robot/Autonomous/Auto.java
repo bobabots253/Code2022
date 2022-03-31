@@ -80,7 +80,7 @@ public class Auto {
         return new ParallelCommandGroup(
             new SillyDriveX(Units.InchesToMeters(33.8), true)
                 .andThen(new HubTrack().withTimeout(3.0))
-                .andThen(new SillyShoot()).withTimeout(4)
+                .andThen(new SillyShoot()).withTimeout(5)
                 .andThen(new RunCommand(() -> 
                     Drivetrain.setOpenLoop(-0.2, -0.2), 
                     Drivetrain.getInstance()).withTimeout(2)),
