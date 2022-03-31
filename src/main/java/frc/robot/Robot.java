@@ -141,7 +141,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     pdp.clearStickyFaults();
-    CommandScheduler.getInstance().schedule();
+    CommandScheduler.getInstance().schedule(m_chooser.getSelected());
     //CommandScheduler.getInstance().schedule(new SillyDriveX(0.5, true));
   }
 

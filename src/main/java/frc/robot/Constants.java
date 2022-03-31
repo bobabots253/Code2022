@@ -121,6 +121,7 @@ public class Constants {
     }
     public static class ClimbConstants {
         public static final int rightMotor = 5, leftMotor = 6; 
+        public static final double climbSens = 0.7;
         /* PID constants */
         public static final double kP = 0;
         public static final double kI = 0;

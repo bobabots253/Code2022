@@ -15,6 +15,7 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.DriveXMeters;
 import frc.robot.commands.HubTrack;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.SillyClimb;
 import frc.robot.commands.SillyDriveX;
 import frc.robot.commands.SillyShoot;
 import frc.robot.commands.SmartShoot;
@@ -95,6 +96,7 @@ public class RobotContainer {
         arm = Arm.getInstance();
         intake = Intake.getInstance();
         climber = Climber.getInstance();
+        //climber.setDefaultCommand(new SillyClimb());
         shooter = Shooter.getInstance();
         //shooter.setDefaultCommand(new StagingQueue());
         limelight = NetworkTableInstance.getDefault().getTable("limelight-intake");
@@ -156,12 +158,12 @@ public class RobotContainer {
             .alongWith(new RunCommand(() -> Intake.getInstance().setConveyor(0.5), Intake.getInstance())))
             .whenReleased(new RunCommand(() -> Shooter.getInstance().setStagingMotor(0.0)).alongWith(new RunCommand(() -> Intake.getInstance().setConveyor(0.0))));
         operator_B.whileHeld(new RunCommand(() -> intake.setConveyor(0.5), intake)).whenReleased(new InstantCommand(()-> intake.stopIntake(), intake));
-        operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climb(0.5), climber)).whenReleased(new InstantCommand(() -> climber.stop()));
+        //operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climb(0.5), climber)).whenReleased(new InstantCommand(() -> climber.stop(), climber));
         //operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climb(-0.5), climber)).whenReleased(new InstantCommand(() -> climber.stop()));
         operator_DPAD_LEFT.whileHeld(new RunCommand(() -> arm.setOpenLoop(0.06), arm)).whenReleased(new InstantCommand(()->arm.setOpenLoop(0.0)));
         operator_DPAD_RIGHT.whileHeld(new RunCommand(() -> arm.setOpenLoop(-0.06), arm)).whenReleased(new InstantCommand(()->arm.setOpenLoop(0.0)));
-        operator_VIEW.whileHeld(new RunCommand(() -> climber.setLeftMotor(0.5), climber)).whenReleased(climber::stop);
-        operator_MENU.whileHeld(new RunCommand(() -> climber.setRightMotor(0.5), climber)).whenReleased(climber::stop);
+        //operator_VIEW.whileHeld(new RunCommand(() -> climber.setLeftMotor(0.5), climber)).whenReleased(climber::stop, climber);
+        //operator_MENU.whileHeld(new RunCommand(() -> climber.setRightMotor(0.5), climber)).whenReleased(climber::stop, climber);
     }
 
     public static Command getAutonomousCommand(Auto.Selection selectedAuto) { //TODO: change auto based on selected strategy
@@ -295,6 +297,14 @@ public class RobotContainer {
 
     public static double getTurn() {
         return deadbandX(driverController.getRightX(), Constants.DriverConstants.kJoystickDeadband);
+    }
+
+    public static double getLeftClimb() {
+        return deadbandX(operatorController.getLeftY(), Constants.DriverConstants.kJoystickDeadband);
+    }
+
+    public static double getRightClimb() {
+        return deadbandX(operatorController.getRightY(), Constants.DriverConstants.kJoystickDeadband);
     }
 
     /*public static Color getColor() {
