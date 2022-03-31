@@ -164,7 +164,7 @@ public class RobotContainer {
 
     public static Command getAutonomousCommand(Auto.Selection selectedAuto) { //TODO: change auto based on selected strategy
         Command auto;
-        if(selectedAuto == Auto.Selection.INTAKEFIRST) { //Start facing cargo, drive, intake, shoot
+        /*if(selectedAuto == Auto.Selection.INTAKEFIRST) { //Start facing cargo, drive, intake, shoot
             auto = new SequentialCommandGroup(
                 new ParallelCommandGroup(
                     Auto.extendIntake(),
@@ -188,8 +188,27 @@ public class RobotContainer {
                 new DriveXMeters(AutoConstants.distToCargo + AutoConstants.hubXOffset - AutoConstants.backupDistance, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1])
             ); 
 
-        } else if(selectedAuto == Auto.Selection.SILLY) {
+        } else*/
+        if(selectedAuto == Auto.Selection.SILLY) {
             auto = Auto.getSillyAuto();
+        } else if(selectedAuto == Auto.Selection.COMPLEX) {
+            auto = new SequentialCommandGroup(
+                Auto.getSillyAuto(),
+                new RunCommand(() -> {
+                    arm.setOpenLoop(0.05);
+                    intake.intake(0.9);
+                    intake.setConveyor(0.3);
+                }, arm, intake),
+                getPathweaverCommand(Robot.autoGroup1[0]),
+                getPathweaverCommand(Robot.autoGroup1[1]),
+                getPathweaverCommand(Robot.autoGroup1[2]),
+                new RunCommand(() -> {
+                    arm.stopArm();
+                    intake.stopIntake();
+                }, arm, intake),
+                new HubTrack().withTimeout(3),
+                new SillyShoot()
+            );
         } else {
             auto = null;
         }
@@ -215,7 +234,7 @@ public class RobotContainer {
         // Create config for trajectory
         TrajectoryConfig config =
             new TrajectoryConfig(
-                    DrivetrainConstants.kMaxSpeedMPS,
+                    DrivetrainConstants.kMaxSpeedMPS/3,
                     DrivetrainConstants.kMaxAcceleration)
                 // Add kinematics to ensure max speed is actually obeyed
                 .setKinematics(Drivetrain.KINEMATICS)

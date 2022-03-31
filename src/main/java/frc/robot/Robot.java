@@ -87,9 +87,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     robot = RobotContainer.getInstance();
     pdp.clearStickyFaults();
-    m_chooser.setDefaultOption("Shoot First", RobotContainer.getAutonomousCommand(Auto.Selection.SHOOTFIRST));
-    m_chooser.addOption("Intake First", RobotContainer.getAutonomousCommand(Auto.Selection.INTAKEFIRST));
-    m_chooser.addOption("Be Silly", RobotContainer.getAutonomousCommand(Auto.Selection.SILLY));
+    m_chooser.setDefaultOption("Be Silly", RobotContainer.getAutonomousCommand(Auto.Selection.SILLY));
+    m_chooser.addOption("Complex", RobotContainer.getAutonomousCommand(Auto.Selection.COMPLEX));
     use_V3.setDefaultOption("Use photoelectric indexing", false);
     use_V3.addOption("Use colorsensorV3 indexing", true);
     teleopStrat.setDefaultOption("Offense", TeleopStrat.OFFENSE);

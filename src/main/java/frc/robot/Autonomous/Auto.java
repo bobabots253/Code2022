@@ -30,7 +30,7 @@ public class Auto {
     private static Arm arm = Arm.getInstance();
     private static Intake intake = Intake.getInstance();
     public enum Selection {
-        SHOOTFIRST(0), INTAKEFIRST(1), SILLY(2);
+        COMPLEX(1), SILLY(2);
         public int val;
         private Selection(int val) {
             this.val = val;
