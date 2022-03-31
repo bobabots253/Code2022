@@ -11,7 +11,7 @@ public class Climber implements Subsystem {
     private static TalonFX right = Util.createTalonFX(ClimbConstants.rightMotor), left = Util.createTalonFX(ClimbConstants.leftMotor);
     private static Climber instance = null;
     private Climber() {
-        right.setInverted(true);
+        right.setInverted(false);
         left.setInverted(true);
         register();
     }
