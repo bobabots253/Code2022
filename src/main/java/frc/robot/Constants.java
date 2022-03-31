@@ -150,7 +150,7 @@ public class Constants {
         public static double kDDist = 0;
         public static double kDistTolerance = 0;
         /* For calculating distance from goal */
-        public static double mountAngle = 45; //TODO: verify distance constants
+        public static double mountAngle = 48; //TODO: verify distance constants
         public static double goalHeightInches = 104;
         public static double limelightHeightInches = 25.5;
     }
