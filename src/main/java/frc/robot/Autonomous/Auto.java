@@ -78,7 +78,7 @@ public class Auto {
 
     public static Command getSillyAuto() { //SFR auto
         return new ParallelCommandGroup(
-            new SillyDriveX(Units.InchesToMeters(33.8), true)
+            new SillyDriveX(Units.InchesToMeters(28.8), true) //TODO: test best backup distance prev 33.8
                 .andThen(new HubTrack().withTimeout(3.0))
                 .andThen(new SillyShoot()).withTimeout(5)
                 .andThen(new RunCommand(() -> 
