@@ -164,7 +164,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     if(auto != null) auto.cancel();
-    robot.setLEDMode(LEDMode.OFF);
+    robot.setLEDMode(LEDMode.ON);
     Shooter.getInstance().setDefaultCommand(new Shoot(18.965)); //TODO: test RPM (should be > 3500)
   }
 

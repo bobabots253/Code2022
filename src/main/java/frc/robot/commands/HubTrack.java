@@ -84,7 +84,7 @@ public class HubTrack implements Command {
 
     @Override
     public void end(boolean interrupted) {
-        RobotContainer.getInstance().setLEDMode(LEDMode.OFF);
+        RobotContainer.getInstance().setLEDMode(LEDMode.ON);
         //RobotContainer.getInstance().setPipeline(IntakeVisionPipeline.DRIVER);
         Drivetrain.setOpenLoop(0.0, 0.0);
         timeframe.reset();
