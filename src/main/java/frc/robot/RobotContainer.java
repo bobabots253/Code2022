@@ -158,7 +158,7 @@ public class RobotContainer {
             .alongWith(new RunCommand(() -> Intake.getInstance().setConveyor(0.5), Intake.getInstance())))
             .whenReleased(new RunCommand(() -> Shooter.getInstance().setStagingMotor(0.0)).alongWith(new RunCommand(() -> Intake.getInstance().setConveyor(0.0))));
         operator_B.whileHeld(new RunCommand(() -> intake.setConveyor(0.3), intake)).whenReleased(new InstantCommand(()-> intake.stopIntake(), intake));
-        operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climb(0.3), climber)).whenReleased(new InstantCommand(() -> climber.stop(), climber));
+        //operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climb(0.3), climber)).whenReleased(new InstantCommand(() -> climber.stop(), climber));
         //operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climb(-0.5), climber)).whenReleased(new InstantCommand(() -> climber.stop()));
         operator_DPAD_LEFT.whileHeld(new RunCommand(() -> arm.setOpenLoop(0.06), arm)).whenReleased(new InstantCommand(()->arm.setOpenLoop(0.0)));
         operator_DPAD_RIGHT.whileHeld(new RunCommand(() -> arm.setOpenLoop(-0.06), arm)).whenReleased(new InstantCommand(()->arm.setOpenLoop(0.0)));
