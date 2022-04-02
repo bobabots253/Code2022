@@ -135,7 +135,7 @@ public class RobotContainer {
         //driver_LB.whileHeld(new SillyShoot());
         driver_X.whileHeld(new HubTrack());
 
-        for(JoystickButton button : Set.of(driver_B, operator_X)) {
+        for(JoystickButton button : Set.of(driver_B, operator_X)) { //TODO: investigate inverted arm actuation
             button.whenHeld(new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1.7)) //Can reimplement with StartEndCommand
                 .whileHeld(new RunCommand(() -> intake.intake(-0.7), intake)
                     .alongWith(new RunCommand(() -> intake.setConveyor(-0.3)))
