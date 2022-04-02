@@ -122,6 +122,7 @@ public class Constants {
     public static class ClimbConstants {
         public static final int rightMotor = 5, leftMotor = 6; 
         public static final double climbSens = 1.0;
+        //Shaft diameter: 0.5in
         /* PID constants */
         public static final double kP = 0;
         public static final double kI = 0;
