@@ -34,6 +34,7 @@ public class Climber implements Subsystem {
     }
 
     public void climb(double value) {
+
         setRightMotor(value);
         setLeftMotor(value);
     }
@@ -41,4 +42,17 @@ public class Climber implements Subsystem {
     public void stop() {
         climb(0.0);
     }
+
+    public static double TicksToMeters(double ticks) {
+        return ticks / (ClimbConstants.kTicksPerRotation) * Math.PI * kShaftDiameter;
+    }
+
+    public static double getRightTicks(){
+        return right.getSelectedSensorPosition();
+    }
+
+    public static double getLeftTicks(){
+        return left.getSelectedSensorPosition();
+    }
+
 }
