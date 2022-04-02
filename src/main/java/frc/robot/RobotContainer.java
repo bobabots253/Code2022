@@ -125,7 +125,7 @@ public class RobotContainer {
         
         driver_Y.whenHeld(new RunCommand(() -> arm.setOpenLoop(-0.05), arm).withTimeout(1.7))
             .whileHeld(new RunCommand(() -> {
-                intake.intake(0.9);
+                intake.intake(0.95);
                 intake.setConveyor(0.3);
             }, intake))
             .whenReleased(new InstantCommand(() -> {
