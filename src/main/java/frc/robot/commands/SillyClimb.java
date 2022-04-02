@@ -7,8 +7,10 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.subsystems.Climber;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SillyClimb implements Command {
+    private boolean reachThresh = false;
     private Subsystem[] requirements = {Climber.getInstance()};
 
     public SillyClimb() {
@@ -16,12 +18,26 @@ public class SillyClimb implements Command {
     }
 
     @Override
+    public void initialize(){
+        reachThresh = false;
+    }
+
+    @Override
     public void execute() {
         double left, right;
         left = RobotContainer.getLeftClimb() * ClimbConstants.climbSens;
         right = RobotContainer.getRightClimb() * ClimbConstants.climbSens;
-        Climber.getInstance().setLeftMotor(left);
+        if(TicksToMeters(getRightTicks()) < kMeterSoftLimit){
+            //it Climber.getInstance().setLeftMotor(left);
+        }
+        else{
+            reachThresh = true;
+            if(left > 0) left = 0;
+            if(right > 0) right = 0;
+        }
+
         Climber.getInstance().setRightMotor(right);
+        SmartDashboard.putString("Climb threshold reached", (reachThresh) ? "true" : "false");
     }
 
     @Override
