@@ -126,7 +126,7 @@ public class Constants {
         public static final double kP = 0;
         public static final double kI = 0;
         public static final double kD = 0;
-        public static final double kShaftDiameter = 0; //TODO: FIND THE DIAMETER
+        public static final double kShaftDiameter = Units.InchesToMeters(0.5);
         public static final double kMeterSoftLimit = 0; //TODO: FIND THE SOFT LIMIT
         public static final double kTicksPerRotation = (2048 * 81); /*Falcon integrated encoder 2048 CPR * gear ratio (81:1) */
     }

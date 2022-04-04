@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class SillyClimb implements Command {
     private boolean reachThresh = false;
     private Subsystem[] requirements = {Climber.getInstance()};
-
     public SillyClimb() {
 
     }
@@ -27,7 +26,7 @@ public class SillyClimb implements Command {
         double left, right;
         left = RobotContainer.getLeftClimb() * ClimbConstants.climbSens;
         right = RobotContainer.getRightClimb() * ClimbConstants.climbSens;
-        if(TicksToMeters(getRightTicks()) < kMeterSoftLimit){
+        if(Climber.TicksToMeters(Climber.getRightTicks()) < ClimbConstants.kMeterSoftLimit){
             //it Climber.getInstance().setLeftMotor(left);
         }
         else{
