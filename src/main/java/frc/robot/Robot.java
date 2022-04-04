@@ -64,6 +64,8 @@ public class Robot extends TimedRobot {
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
   private final SendableChooser<Boolean> use_V3 = new SendableChooser<>(); //Use ColorSensorV3 over Photoelectric for conveyor queuing
   private final SendableChooser<TeleopStrat> teleopStrat = new SendableChooser<>();
+  private final SendableChooser<Boolean> useFeedForward = new SendableChooser<>();
+
   public static boolean useV3() {
     return use_csV3; //prevent unwanted writing operations but allow reading
   }
@@ -95,9 +97,12 @@ public class Robot extends TimedRobot {
     use_V3.addOption("Use colorsensorV3 indexing", true);
     teleopStrat.setDefaultOption("Offense", TeleopStrat.OFFENSE);
     teleopStrat.addOption("Defense", TeleopStrat.DEFENSE);
+    useFeedForward.setDefaultOption("Use feedforward", true);
+    useFeedForward.addOption("Use 65%", false);
     SmartDashboard.putData("Auto choices", m_chooser);
     SmartDashboard.putData("Use ColorSensorV3 queuing?", use_V3);
     SmartDashboard.putData("Teleop Strategy", teleopStrat);
+    SmartDashboard.putData("Feedforward shooter", useFeedForward);
 
     /*Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
     try {
@@ -124,7 +129,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     use_csV3 = use_V3.getSelected();
-    SmartDashboard.putNumber("pdp channel 10", pdp.getCurrent(10));
+    SmartDashboard.putNumber("Hub distance inches", Units.MetersToInches(RobotContainer.getDistance()));
   }
 
   /**
@@ -141,7 +146,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     pdp.clearStickyFaults();
-    CommandScheduler.getInstance().schedule();
+    CommandScheduler.getInstance().schedule(m_chooser.getSelected());
     //CommandScheduler.getInstance().schedule(new SillyDriveX(0.5, true));
   }
 
@@ -164,8 +169,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     if(auto != null) auto.cancel();
-    robot.setLEDMode(LEDMode.OFF);
-    Shooter.getInstance().setDefaultCommand(new Shoot(18.965)); //TODO: test RPM (should be > 3500)
+    robot.setLEDMode(LEDMode.ON);
+    //Shooter.getInstance().setDefaultCommand(new Shoot(18.965)); //TODO: test RPM (should be > 3500)
   }
 
   /** This function is called periodically during operator control. */
@@ -178,6 +183,11 @@ public class Robot extends TimedRobot {
       case DEFENSE:
         Drivetrain.setInverted(true);
         break;
+    }
+    if(useFeedForward.getSelected()) {
+      Shooter.getInstance().setDefaultCommand(new Shoot(18.965));
+    } else {
+      Shooter.getInstance().setDefaultCommand(new RunCommand(() -> Shooter.getInstance().setOpenLoop(.65), Shooter.getInstance()));
     }
   }
 

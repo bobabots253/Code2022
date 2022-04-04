@@ -45,6 +45,7 @@ public class Shooter implements Subsystem {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Shooter flywheel speed: ", getShooterVelocity());
+
     }
 
     public void setStagingMotor(double value) {

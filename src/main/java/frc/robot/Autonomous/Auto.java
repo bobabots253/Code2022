@@ -78,8 +78,16 @@ public class Auto {
 
     public static Command getSillyAuto() { //SFR auto
         return new ParallelCommandGroup(
-            new SillyDriveX(Units.InchesToMeters(33.8), true).andThen(new HubTrack().withTimeout(3.0)).andThen((new SillyShoot()).withTimeout(3).andThen(new RunCommand(() -> Drivetrain.setOpenLoop(-0.2, -0.2), Drivetrain.getInstance()).withTimeout(2))),
-            new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1.5).andThen(new InstantCommand(() -> Arm.getInstance().stopArm()))
+            new SillyDriveX(Units.InchesToMeters(28.8), true) //TODO: test best backup distance prev 33.8
+                .andThen(new HubTrack().withTimeout(3.0))
+                .andThen(new SillyShoot()).withTimeout(5)
+                .andThen(new RunCommand(() -> 
+                    Drivetrain.setOpenLoop(-0.2, -0.2), 
+                    Drivetrain.getInstance()).withTimeout(2)),
+            new RunCommand(() ->
+                Arm.getInstance().setOpenLoop(0.05),
+                Arm.getInstance()).withTimeout(1.5)
+                    .andThen(new InstantCommand(() -> Arm.getInstance().stopArm()))
         );
     }
 }

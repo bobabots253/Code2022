@@ -68,6 +68,7 @@ public class Arm extends ProfiledPIDSubsystem {
         setGoal(goal.position);
     }
     public void setOpenLoop(double value) {
+        SmartDashboard.putNumber("Commanded arm actuation", value);
         motor.set(value);
     }
     /**

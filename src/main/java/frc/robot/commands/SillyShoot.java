@@ -43,7 +43,7 @@ public class SillyShoot implements Command {
             //Intake.getInstance().intake(0.55);
             Intake.getInstance().setConveyor(0.50); 
             
-            Shooter.getInstance().setStagingMotor(0.3);
+            Shooter.getInstance().setStagingMotor(0.5);
             
         }
         

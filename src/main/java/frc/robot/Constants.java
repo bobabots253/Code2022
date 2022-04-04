@@ -121,6 +121,8 @@ public class Constants {
     }
     public static class ClimbConstants {
         public static final int rightMotor = 5, leftMotor = 6; 
+        public static final double climbSens = 1.0;
+        //Shaft diameter: 0.5in
         /* PID constants */
         public static final double kP = 0;
         public static final double kI = 0;
@@ -149,8 +151,8 @@ public class Constants {
         public static double kDDist = 0;
         public static double kDistTolerance = 0;
         /* For calculating distance from goal */
-        public static double mountAngle = 45; //TODO: verify distance constants
-        public static double goalHeightInches = 35.8+2.6;
-        public static double limelightHeightInches = 35.8;
+        public static double mountAngle = 48; //TODO: verify distance constants
+        public static double goalHeightInches = 104;
+        public static double limelightHeightInches = 25.5;
     }
 }
