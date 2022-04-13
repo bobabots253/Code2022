@@ -204,7 +204,7 @@ public class RobotContainer {
         if(selectedAuto == Auto.Selection.SILLY) {
             auto = Auto.getSillyAuto();
         } else if(selectedAuto == Auto.Selection.COMPLEX) {
-            /*auto = new SequentialCommandGroup(
+            auto = new SequentialCommandGroup(
                 new SillyDriveX(Units.InchesToMeters(33.8), true),
                 new HubTrack().withTimeout(3.0),
                 new SillyShoot().withTimeout(3),
@@ -222,8 +222,8 @@ public class RobotContainer {
                 }, arm, intake),
                 new HubTrack().withTimeout(3),
                 new SillyShoot()
-            );*/
-            auto = null;
+            );
+            //auto = null;
         } else {
             auto = null;
         }

@@ -91,8 +91,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     robot = RobotContainer.getInstance();
     pdp.clearStickyFaults();
-    m_chooser.setDefaultOption("Be Silly", RobotContainer.getAutonomousCommand(Auto.Selection.SILLY));
-    m_chooser.addOption("Complex", RobotContainer.getAutonomousCommand(Auto.Selection.COMPLEX));
     use_V3.setDefaultOption("Use photoelectric indexing", false);
     use_V3.addOption("Use colorsensorV3 indexing", true);
     teleopStrat.setDefaultOption("Offense", TeleopStrat.OFFENSE);
@@ -104,18 +102,19 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Teleop Strategy", teleopStrat);
     SmartDashboard.putData("Feedforward shooter", useFeedForward);
 
-    /*Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+    Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(smallJSON);
     try {
-      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+      smallTraj = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
     } catch (IOException e) {
       System.out.println("silly pathweaver bad");
       e.printStackTrace();
-    }*/
+    }
     smallTraj = initializeTrajectory(smallJSON);
     for(int i = 0; i < autoGroup1.length; i++) {
       autoGroup1[i] = initializeTrajectory(auto1JSON[i]);
     }
-    //Arm.getInstance().resetEncoders();
+    m_chooser.setDefaultOption("Be Silly", RobotContainer.getAutonomousCommand(Auto.Selection.SILLY));
+    m_chooser.addOption("Complex", RobotContainer.getAutonomousCommand(Auto.Selection.COMPLEX));
   }
 
   /**
