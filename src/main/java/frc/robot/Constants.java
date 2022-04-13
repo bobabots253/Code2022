@@ -63,12 +63,12 @@ public class Constants {
             rightSlave = 4; // TalonFX
         
         /* feedforward constants */
-        public static final double kS = 0.364; // voltage required to overcome friction (V)
-        public static final double kV = 2.34; // voltage over velocity (V/(meters/second))
-        public static final double kA = 0.0824; // voltage over acceleration (V(meters/second/second))
+        public static final double kS = 0.66589; // voltage required to overcome friction (V)
+        public static final double kV = 2.4372; // voltage over velocity (V/(meters/second))
+        public static final double kA = 0.28968; // voltage over acceleration (V(meters/second/second))
 
         /* PID constants */
-        public static final double kP = 2.9;
+        public static final double kP = 3.2181;
         public static final double kI = 0;
         public static final double kD = 0;
 
