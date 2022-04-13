@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -135,14 +136,21 @@ public class RobotContainer {
         //driver_LB.whileHeld(new SillyShoot());
         driver_X.whileHeld(new HubTrack());
 
-        for(JoystickButton button : Set.of(driver_B, operator_X)) { //TODO: investigate inverted arm actuation
-            button.whenHeld(new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1.7)) //Can reimplement with StartEndCommand
-                .whileHeld(new RunCommand(() -> intake.intake(-0.7), intake)
-                    .alongWith(new RunCommand(() -> intake.setConveyor(-0.3)))
-                    .alongWith(new RunCommand(() -> shooter.setStagingMotor(-0.2))))
-                .whenReleased(new InstantCommand(() -> intake.stopIntake())
-                    .alongWith(new RunCommand(() -> Arm.getInstance().setOpenLoop(-0.05), Arm.getInstance()).withTimeout(1.7).andThen(arm::stopArm, arm))
-                    .alongWith(new RunCommand(() -> shooter.setStagingMotor(0.0))));
+        for(JoystickButton button : Set.of(driver_B, operator_X)) { 
+            button.whenHeld(new RunCommand(() -> arm.setOpenLoop(0.05), arm)
+                .alongWith(
+                    new RunCommand(() -> intake.intake(0.95), intake).withTimeout(0.3)
+                    .andThen(new RunCommand(() -> intake.intake(0), intake).withTimeout(0.15))
+                    .andThen(new RunCommand(() -> {
+                        intake.intake(-0.7);
+                        intake.setConveyor(-0.3);
+                    }, intake))
+                )
+            )
+            .whenReleased(
+                new InstantCommand(intake::stopIntake, intake)
+                .alongWith(new StartEndCommand(() -> arm.setOpenLoop(-0.05), arm::stopArm, arm).withTimeout(1.7))
+            );
         }
         
 
