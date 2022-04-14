@@ -57,9 +57,9 @@ public class Robot extends TimedRobot {
   }
   
   public static Trajectory smallTraj = new Trajectory();
-  private static final String smallJSON = "paths/Small.wpilib.json";
+  private static final String smallJSON = "paths/output/Small.wpilib.json";
   
-  private static final String[] auto1JSON = {"paths/Auto1.wpilib.json", "paths/Auto2.wpilib.json", "paths/Auto3.wpilib.json"};
+  private static final String[] auto1JSON = {"paths/output/Auto1.wpilib.json", "paths/output/Auto2.wpilib.json", "paths/output/Auto3.wpilib.json"};
   public static Trajectory[] autoGroup1 = new Trajectory[3];
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
   private final SendableChooser<Boolean> use_V3 = new SendableChooser<>(); //Use ColorSensorV3 over Photoelectric for conveyor queuing
@@ -101,7 +101,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Use ColorSensorV3 queuing?", use_V3);
     SmartDashboard.putData("Teleop Strategy", teleopStrat);
     SmartDashboard.putData("Feedforward shooter", useFeedForward);
-
+    RobotContainer.navX.reset();
+    
     Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(smallJSON);
     try {
       smallTraj = TrajectoryUtil.fromPathweaverJson(trajectoryPath);

@@ -54,13 +54,14 @@ public class Drivetrain implements Subsystem {
 
     @Override
     public void periodic() {
-        ODOMETRY.update(Rotation2d.fromDegrees(RobotContainer.navX.getAngle()),
+        ODOMETRY.update(Rotation2d.fromDegrees(-RobotContainer.navX.getAngle()),
         getLeftEncMeters(),
         getRightEncMeters());
         SmartDashboard.putNumber("Left Master output: ", leftMaster.getMotorOutputPercent());
         //SmartDashboard.putNumber("Left Slave output: ", leftSlave.getMotorOutputPercent());
         SmartDashboard.putNumber("Right Master output: ", rightMaster.getMotorOutputPercent());
         SmartDashboard.putNumber("NavX heading", RobotContainer.navX.getAngle());
+        SmartDashboard.putNumber("NavX rot2D", RobotContainer.navX.getRotation2d().getDegrees());
         //SmartDashboard.putNumber("Right Slave output: ", rightSlave.getMotorOutputPercent());
         
     }

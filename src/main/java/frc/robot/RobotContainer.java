@@ -204,7 +204,7 @@ public class RobotContainer {
         if(selectedAuto == Auto.Selection.SILLY) {
             auto = Auto.getSillyAuto();
         } else if(selectedAuto == Auto.Selection.COMPLEX) {
-            auto = new SequentialCommandGroup(
+            /*auto = new SequentialCommandGroup(
                 new SillyDriveX(Units.InchesToMeters(33.8), true),
                 new HubTrack().withTimeout(3.0),
                 new SillyShoot().withTimeout(3),
@@ -222,7 +222,8 @@ public class RobotContainer {
                 }, arm, intake),
                 new HubTrack().withTimeout(3),
                 new SillyShoot()
-            );
+            );*/
+            auto = getPathweaverCommand(Robot.smallTraj);
             //auto = null;
         } else {
             auto = null;
@@ -265,8 +266,8 @@ public class RobotContainer {
                 Drivetrain.FEEDFORWARD,
                 Drivetrain.KINEMATICS,
                 Drivetrain::getWheelSpeeds,
-                new PIDController(DrivetrainConstants.kPV, 0, 0),
-                new PIDController(DrivetrainConstants.kPV, 0, 0),
+                new PIDController(DrivetrainConstants.kP, 0, 0),
+                new PIDController(DrivetrainConstants.kP, 0, 0),
                 // RamseteCommand passes volts to the callback
                 Drivetrain::setVoltages,
                 Drivetrain.getInstance());
@@ -275,7 +276,7 @@ public class RobotContainer {
         Drivetrain.ODOMETRY.resetPosition(trajectory.getInitialPose(), navX.getRotation2d());
 
         // Run path following command, then stop at the end.
-        return ramseteCommand.andThen(() -> Drivetrain.setOpenLoop(0, 0));
+        return new InstantCommand(() -> Drivetrain.ODOMETRY.resetPosition(trajectory.getInitialPose(), navX.getRotation2d())).andThen(ramseteCommand.andThen(() -> Drivetrain.setOpenLoop(0, 0)));
     }
 
      /**
