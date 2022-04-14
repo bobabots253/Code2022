@@ -54,7 +54,7 @@ public class Drivetrain implements Subsystem {
 
     @Override
     public void periodic() {
-        ODOMETRY.update(Rotation2d.fromDegrees(RobotContainer.navX.getAngle()),
+        ODOMETRY.update(Rotation2d.fromDegrees(-RobotContainer.navX.getAngle()),
         getLeftEncMeters(),
         getRightEncMeters());
         SmartDashboard.putNumber("Left Master output: ", leftMaster.getMotorOutputPercent());
