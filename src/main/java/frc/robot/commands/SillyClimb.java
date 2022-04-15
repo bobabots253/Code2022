@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ClimbConstants;
+import frc.robot.Units.ClimbUnits;
 import frc.robot.subsystems.Climber;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -26,13 +27,17 @@ public class SillyClimb implements Command {
         double left, right;
         left = RobotContainer.getLeftClimb() * ClimbConstants.climbSens;
         right = RobotContainer.getRightClimb() * ClimbConstants.climbSens;
-        if(Climber.TicksToMeters(Climber.getRightTicks()) < ClimbConstants.kMeterSoftLimit){
-            //it Climber.getInstance().setLeftMotor(left);
+        if(ClimbUnits.TicksToMeters(Climber.getRightTicks()) < ClimbConstants.kMeterSoftLimit){
+            
         }
-        else{
+        if(ClimbUnits.TicksToMeters(Climber.getRightTicks()) < ClimbConstants.kMeterSoftLimit) {
             reachThresh = true;
             if(left > 0) left = 0;
             if(right > 0) right = 0;
+        }
+        if(ClimbUnits.TicksToMeters(Climber.getRightTicks()) <= ClimbConstants.kMaxRetraction) {
+            if(left < 0) left = 0;
+            if(right < 0) right = 0;
         }
 
         Climber.getInstance().setRightMotor(right);

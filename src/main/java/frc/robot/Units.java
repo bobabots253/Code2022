@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.DrivetrainConstants;
 
 public class Units {
@@ -86,7 +87,11 @@ public class Units {
         }
 
     }
-
+    public static class ClimbUnits {
+        public static double TicksToMeters(double ticks) {
+            return ticks / (ClimbConstants.kTicksPerRotation) * Math.PI * ClimbConstants.kShaftDiameter;
+        }
+    }
     /**
      * Converts given meters to feet.
      *
