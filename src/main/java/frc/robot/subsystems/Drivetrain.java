@@ -51,15 +51,23 @@ public class Drivetrain implements Subsystem {
 
         register();
     }
-
+    public double leftMaxVelocity = 0.0;
+    public double rightMaxVelocity = 0.0;
     @Override
     public void periodic() {
         ODOMETRY.update(Rotation2d.fromDegrees(-RobotContainer.navX.getAngle()),
         getLeftEncMeters(),
         getRightEncMeters());
+        double leftSpeed = getLeftEncVelocityMeters();
+        double rightSpeed = getRightEncVelocityMeters();
+        if(leftSpeed > leftMaxVelocity) leftMaxVelocity = leftSpeed;
+        if(rightSpeed > rightMaxVelocity) rightMaxVelocity = rightSpeed;
+        SmartDashboard.putNumber("Max left MPS", leftMaxVelocity);
+        SmartDashboard.putNumber("Max right MPS", rightMaxVelocity);
         SmartDashboard.putNumber("Left Master output: ", leftMaster.getMotorOutputPercent());
         //SmartDashboard.putNumber("Left Slave output: ", leftSlave.getMotorOutputPercent());
         SmartDashboard.putNumber("Right Master output: ", rightMaster.getMotorOutputPercent());
+
         SmartDashboard.putNumber("NavX heading", RobotContainer.navX.getAngle());
         //SmartDashboard.putNumber("Right Slave output: ", rightSlave.getMotorOutputPercent());
         
