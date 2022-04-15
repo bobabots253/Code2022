@@ -77,7 +77,7 @@ public class Constants {
                                                                      // multiplied by gear ratio (10.42:1)
         public static final double kWheelDiameter = Units.InchesToMeters(6);
 
-        public static final double kMaxSpeedMPS = 4.972; // max speed in meters per second
+        public static final double kMaxSpeedMPS = 3.726; // max speed in meters per second
         public static final double kMaxAcceleration = 0; //max acceleration in meters per second per second
         public static final double kTrackWidth = 0.7051868402911773; // distance between wheels
         public static final double kMaxCurvature = Math.toRadians(-162); // Maximum turn rate in radians per meter
