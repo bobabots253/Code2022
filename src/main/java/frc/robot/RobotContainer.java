@@ -234,7 +234,7 @@ public class RobotContainer {
                 new HubTrack().withTimeout(3),
                 new SillyShoot()
             );*/
-            auto = null;
+            auto = new InstantCommand();
         } else {
             auto = null;
         }
