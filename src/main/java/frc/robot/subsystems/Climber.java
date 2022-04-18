@@ -13,6 +13,7 @@ public class Climber implements Subsystem {
     private Climber() {
         right.setInverted(false);
         left.setInverted(false);
+        resetEncoders();
         register();
     }
 
@@ -51,4 +52,17 @@ public class Climber implements Subsystem {
         return left.getSelectedSensorPosition();
     }
 
+    public void resetEncoders() {
+        resetEncoders(0, 0);
+    }
+    
+    /**
+     * Sets encoders to a specific value
+     * @param left  left wheel value
+     * @param right right wheel value
+     */
+    public void resetEncoders(int left, int right) {
+        this.right.setSelectedSensorPosition(right);
+        this.left.setSelectedSensorPosition(left);
+    }
 }
