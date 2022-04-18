@@ -142,7 +142,7 @@ public class Constants {
         /* Turn PID Constants */
         public static double kPTurn = 0.1;
         public static double kITurn = 0;
-        public static double kDTurn = 0.003; //TODO: tune D
+        public static double kDTurn = 0.003;
         public static double kTurnTolerance = 0.0;//1.07;
 
         /* Distance PID Constants */
