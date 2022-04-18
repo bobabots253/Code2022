@@ -80,7 +80,7 @@ public class Constants {
         public static final double kMaxSpeedMPS = 3.726; // max speed in meters per second
         public static final double kMaxAcceleration = 0; //max acceleration in meters per second per second
         public static final double kTrackWidth = 0.7051868402911773; // distance between wheels
-        public static final double kMaxCurvature = Math.toRadians(-162); // Maximum turn rate in radians per meter
+        public static final double kMaxCurvature = -5.283706 / kMaxSpeedMPS; // Maximum turn rate in radians per meter TODO: update
 
         public static final double sdx = 0.2;
 
