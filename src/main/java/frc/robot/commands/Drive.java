@@ -119,8 +119,8 @@ public class Drive implements Command {
                 
                 break;
             case TankDrive:
-                left = throttle;
-                right = altThrottle;
+                left = throttle * DriverConstants.kDriveSens;
+                right = altThrottle * DriverConstants.kDriveSens;
                 break;
             default:
                 left = right = 0;
