@@ -30,11 +30,12 @@ public class HubTrack implements Command {
     private Subsystem[] requirements = { Drivetrain.getInstance()};
     private Timeframe<Integer> timeframe;
     public HubTrack() {
+        timeframe = new Timeframe<>(1.5, 1.0/Constants.dt);
     }
 
     @Override
     public void initialize() {
-        timeframe = new Timeframe<>(1.5, 1.0/Constants.dt);
+        timeframe.reset();
         RobotContainer.getInstance().setLEDMode(LEDMode.ON);
         RobotContainer.getInstance().setPipeline(IntakeVisionPipeline.ROBOT);
     }
@@ -49,22 +50,22 @@ public class HubTrack implements Command {
 
         //double distError = RobotContainer.getYOffset();
 
-        if (Math.abs(turnError) < VisionConstants.kTurnTolerance) turnError = 0;
+        //if (Math.abs(turnError) < VisionConstants.kTurnTolerance) turnError = 0;
         //if (distError < VisionConstants.kDistTolerance) distError = 0;
         //double throttle = DIST_PID_CONTROLLER.calculate(distError, 0);
         double turn = TURN_PID_CONTROLLER.calculate(turnError, 0);
         SmartDashboard.putNumber("turn", turn);
         
         // Turns in place when there is no throttle input
-        left = turn /** DrivetrainConstants.kMaxSpeedMPS*/ * DriverConstants.kTurnInPlaceSens;
-        right = -turn /** DrivetrainConstants.kMaxSpeedMPS*/ * DriverConstants.kTurnInPlaceSens;
+        left = turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
+        right = -turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
         double maxMagnitude;
-        if((maxMagnitude = Math.max(Math.abs(left), Math.abs(right))) > DriverConstants.kTurnInPlaceSens) {
+        /*if((maxMagnitude = Math.max(Math.abs(left), Math.abs(right))) > DriverConstants.kTurnInPlaceSens) {
             left = left / maxMagnitude * DriverConstants.kTurnInPlaceSens;
             right = right / maxMagnitude * DriverConstants.kTurnInPlaceSens;
-        }
-        //left = Drivetrain.FEEDFORWARD.calculate(left) / Constants.kMaxVoltage;
-        //right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
+        }*/
+        left = Drivetrain.FEEDFORWARD.calculate(left) / Constants.kMaxVoltage;
+        right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
         atTarget = ((int)turnError == 0);
         if(atTarget) { //TODO: Test timeframe and if it works well, tune the desired "matching percentage"
             timeframe.update(1);
@@ -72,7 +73,7 @@ public class HubTrack implements Command {
             timeframe.update(0);
         }
         SmartDashboard.putNumber("AtTarget?", (atTarget) ? 1 : 0);
-        SmartDashboard.putBoolean("Adequate tracking?", (timeframe.percentEqual(1) >= 0.85));
+        SmartDashboard.putNumber("Mean Accuracy", (timeframe.getAverageValue()));
         Drivetrain.setOpenLoop(left, right);
 
     }
@@ -85,7 +86,7 @@ public class HubTrack implements Command {
     @Override
     public void end(boolean interrupted) {
         RobotContainer.getInstance().setLEDMode(LEDMode.ON);
-        //RobotContainer.getInstance().setPipeline(IntakeVisionPipeline.DRIVER);
+        RobotContainer.getInstance().setPipeline(IntakeVisionPipeline.DRIVER);
         Drivetrain.setOpenLoop(0.0, 0.0);
         timeframe.reset();
     }
