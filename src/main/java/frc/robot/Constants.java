@@ -80,7 +80,7 @@ public class Constants {
         public static final double kMaxSpeedMPS = 3.726; // max speed in meters per second
         public static final double kMaxAcceleration = 0; //max acceleration in meters per second per second
         public static final double kTrackWidth = 0.7051868402911773; // distance between wheels
-        public static final double kMaxCurvature = -5.283706 / kMaxSpeedMPS; // Maximum turn rate in radians per meter TODO: update
+        public static final double kMaxCurvature = -5.283706 / (kMaxSpeedMPS/2); // Maximum turn rate in radians per meter TODO: update
 
         public static final double sdx = 0.2;
 
@@ -146,11 +146,12 @@ public class Constants {
         public static double kTurnTolerance = 1.07;
 
         /* Distance PID Constants */
-        public static double kPDist = 0.1;
-        public static double kIDist = 0;
-        public static double kDDist = 0;
-        public static double kDistTolerance = 0;
-        public static double kYDesired = 0.0; //For proper shooting distance
+        public static double kPDist = 0.01;//0.03 / (5/3);
+        public static double kIDist = 0.0;
+        public static double kDDist = 0.00055;//0.003 / (5/3);
+        public static double kDistTolerance = 1.0;
+        public static double kYDesired = 3.674; //For proper shooting distance
+        public static double kShootingDistance = Units.InchesToMeters(70.682);
         /* For calculating distance from goal */
         public static double mountAngle = 48; //TODO: verify distance constants
         public static double goalHeightInches = 104;

@@ -45,27 +45,36 @@ public class HubTrack implements Command {
     public void execute() {
         double left, right;
         double turnError = RobotContainer.getXOffset();
-        //double distError = VisionConstants.kYDesired - RobotContainer.getYOffset();
+        double distError = VisionConstants.kShootingDistance - RobotContainer.getDistance();
         SmartDashboard.putNumber("x off", RobotContainer.getXOffset());
         SmartDashboard.putNumber("y off", RobotContainer.getYOffset());
 
         //if (Math.abs(turnError) < VisionConstants.kTurnTolerance) turnError = 0;
         //if (distError < VisionConstants.kDistTolerance) distError = 0;
-        //double throttle = DIST_PID_CONTROLLER.calculate(distError, 0);
+        double throttle = DIST_PID_CONTROLLER.calculate(distError, 0);
         double turn = TURN_PID_CONTROLLER.calculate(turnError, 0);
         SmartDashboard.putNumber("turn", turn);
         
-        // Turns in place when there is no throttle input
-        left = turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
-        right = -turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
-        double maxMagnitude;
-        /*if((maxMagnitude = Math.max(Math.abs(left), Math.abs(right))) > DriverConstants.kTurnInPlaceSens) {
-            left = left / maxMagnitude * DriverConstants.kTurnInPlaceSens;
-            right = right / maxMagnitude * DriverConstants.kTurnInPlaceSens;
-        }*/
+        if(throttle != 0) {
+            throttle *= DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens;
+            turn *= throttle * DrivetrainConstants.kMaxCurvature * DriverConstants.kTurnSens;
+            DifferentialDriveWheelSpeeds targetSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
+            targetSpeeds.desaturate(DrivetrainConstants.kMaxSpeedMPS);
+            left = Drivetrain.FEEDFORWARD.calculate(targetSpeeds.leftMetersPerSecond);
+            right = Drivetrain.FEEDFORWARD.calculate(targetSpeeds.rightMetersPerSecond);
+        } else {
+            // Turns in place when there is no throttle input
+            left = turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
+            right = -turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
+            double maxMagnitude;
+            /*if((maxMagnitude = Math.max(Math.abs(left), Math.abs(right))) > DriverConstants.kTurnInPlaceSens) {
+                left = left / maxMagnitude * DriverConstants.kTurnInPlaceSens;
+                right = right / maxMagnitude * DriverConstants.kTurnInPlaceSens;
+            }*/
+        }
         left = Drivetrain.FEEDFORWARD.calculate(left) / Constants.kMaxVoltage;
         right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
-        atTarget = (int) Math.abs(turnError) <= VisionConstants.kTurnTolerance;
+        atTarget = (Math.abs(turnError) <= VisionConstants.kTurnTolerance) && (Math.abs(distError) <= VisionConstants.kDistTolerance);
         if(atTarget) { //TODO: Test timeframe and if it works well, tune the desired "matching percentage"
             timeframe.update(1);
         } else {
@@ -85,7 +94,7 @@ public class HubTrack implements Command {
     @Override
     public void end(boolean interrupted) {
         RobotContainer.getInstance().setLEDMode(LEDMode.ON);
-        RobotContainer.getInstance().setPipeline(IntakeVisionPipeline.DRIVER);
+        //RobotContainer.getInstance().setPipeline(IntakeVisionPipeline.DRIVER);
         Drivetrain.setOpenLoop(0.0, 0.0);
         timeframe.reset();
     }
