@@ -52,12 +52,14 @@ public class Arm extends ProfiledPIDSubsystem {
     private Arm() {
         super(new ProfiledPIDController(ArmConstants.kP , ArmConstants.kI, ArmConstants.kD,
                 new TrapezoidProfile.Constraints(ArmConstants.kMaxVelocity, ArmConstants.kMaxAcceleration)), 0);
+        //motor.setSmartCurrentLimit(2);
         /*
         motor.configContinuousCurrentLimit(1);
         motor.configPeakCurrentLimit(0);
         motor.enableCurrentLimit(true);
         */
         motor.setInverted(false);
+        //motor.burnFlash();
         setGoal(State.STORED);
 
         disable();
