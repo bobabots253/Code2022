@@ -45,10 +45,9 @@ public class HubTrack implements Command {
     public void execute() {
         double left, right;
         double turnError = RobotContainer.getXOffset();
+        //double distError = VisionConstants.kYDesired - RobotContainer.getYOffset();
         SmartDashboard.putNumber("x off", RobotContainer.getXOffset());
         SmartDashboard.putNumber("y off", RobotContainer.getYOffset());
-
-        //double distError = RobotContainer.getYOffset();
 
         //if (Math.abs(turnError) < VisionConstants.kTurnTolerance) turnError = 0;
         //if (distError < VisionConstants.kDistTolerance) distError = 0;
@@ -66,7 +65,7 @@ public class HubTrack implements Command {
         }*/
         left = Drivetrain.FEEDFORWARD.calculate(left) / Constants.kMaxVoltage;
         right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
-        atTarget = ((int)turnError == 0);
+        atTarget = (int) Math.abs(turnError) <= VisionConstants.kTurnTolerance;
         if(atTarget) { //TODO: Test timeframe and if it works well, tune the desired "matching percentage"
             timeframe.update(1);
         } else {

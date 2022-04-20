@@ -142,14 +142,15 @@ public class Constants {
         /* Turn PID Constants */
         public static double kPTurn = 0.1;
         public static double kITurn = 0;
-        public static double kDTurn = 0.003;
-        public static double kTurnTolerance = 0.0;//1.07;
+        public static double kDTurn = 0.0035;
+        public static double kTurnTolerance = 1.07;
 
         /* Distance PID Constants */
         public static double kPDist = 0.1;
         public static double kIDist = 0;
         public static double kDDist = 0;
         public static double kDistTolerance = 0;
+        public static double kYDesired = 0.0; //For proper shooting distance
         /* For calculating distance from goal */
         public static double mountAngle = 48; //TODO: verify distance constants
         public static double goalHeightInches = 104;
