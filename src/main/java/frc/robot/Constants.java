@@ -72,6 +72,11 @@ public class Constants {
         public static final double kI = 0;
         public static final double kD = 0;
 
+        /* TurnX PID */
+        public static final double kPT = 0.005; //0.005 accurate
+        public static final double kIT = 0;
+        public static final double kDT = 0;
+
         /* Wheels Constants */
         public static final double kTicksPerRotation = 2048 * 10.71; // Falcon 500 integrated encoder (2048 CPR)
                                                                      // multiplied by gear ratio (10.42:1)
@@ -143,7 +148,7 @@ public class Constants {
         public static double kPTurn = 0.1;
         public static double kITurn = 0;
         public static double kDTurn = 0.0035;
-        public static double kTurnTolerance = 1.07;
+        public static double kTurnTolerance = 0.5;
 
         /* Distance PID Constants */
         public static double kPDist = 0.1;

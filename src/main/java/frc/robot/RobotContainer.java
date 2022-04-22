@@ -215,26 +215,47 @@ public class RobotContainer {
         if(selectedAuto == Auto.Selection.SILLY) {
             auto = Auto.getSillyAuto();
         } else if(selectedAuto == Auto.Selection.COMPLEX) {
-            /*auto = new SequentialCommandGroup(
-                new SillyDriveX(Units.InchesToMeters(33.8), true),
-                new HubTrack().withTimeout(3.0),
-                new SillyShoot().withTimeout(3),
-                new ParallelCommandGroup(new RunCommand(() -> {
-                        arm.setOpenLoop(0.05);
-                        intake.intake(0.9);
-                        intake.setConveyor(0.3);
-                    }, arm, intake),
-                    getPathweaverCommand(Robot.autoGroup1[0])),
-                getPathweaverCommand(Robot.autoGroup1[1]),
-                getPathweaverCommand(Robot.autoGroup1[2]),
-                new InstantCommand(() -> {
-                    arm.stopArm();
-                    intake.stopIntake();
-                }, arm, intake),
-                new HubTrack().withTimeout(3),
-                new SillyShoot()
-            );*/
-            auto = new InstantCommand();
+            // auto = new SequentialCommandGroup(
+            //     new SillyDriveX(Units.InchesToMeters(33.8), true),
+            //     new HubTrack().withTimeout(3.0),
+            //     new SillyShoot().withTimeout(3),
+            //     new ParallelCommandGroup(new RunCommand(() -> {
+            //             arm.setOpenLoop(0.05);
+            //             intake.intake(0.9);
+            //             intake.setConveyor(0.3);
+            //         }, arm, intake),
+            //         getPathweaverCommand(autoGroup1[0])
+            //     ),
+            //     getPathweaverCommand(autoGroup1[1]),
+            //     getPathweaverCommand(autoGroup1[2]),
+            //     new InstantCommand(() -> {
+            //         arm.stopArm();
+            //         intake.stopIntake();
+            //     }, arm, intake),
+            //     new HubTrack().withTimeout(3),
+            //     new SillyShoot()
+            // );
+
+            // auto = new SequentialCommandGroup(
+            //     new ParallelCommandGroup(
+            //         new RunCommand(() -> {
+            //             arm.setOpenLoop(0.05);
+            //             intake.intake(0.9);
+            //             intake.setConveyor(0.3);
+            //         }, arm, intake).withTimeout(4.0)
+            //         .andThen(
+            //             new InstantCommand(() -> {
+            //                 arm.stopArm();
+            //                 intake.stopIntake();
+            //             }, arm, intake)
+            //         ),
+            //         getPathweaverCommand(smallTraj)
+            //     ),
+            //     new TurnXDegrees(150, 100, 75),
+            //     new DriveXMeters(1, 2.0, 1.0)
+            // );
+            auto = new TurnXDegrees(359, 100, 75);
+            // auto = new InstantCommand();
         } else {
             auto = null;
         }
@@ -248,8 +269,8 @@ public class RobotContainer {
 
     
     public static Trajectory smallTraj = new Trajectory();
-    private static final String smallJSON = "paths/Small.wpilib.json";
-    private static final String[] auto1JSON = {"paths/Auto1.wpilib.json", "paths/Auto2.wpilib.json", "paths/Auto3.wpilib.json"};
+    private static final String smallJSON = "paths/output/Small.wpilib.json";
+    private static final String[] auto1JSON = {"paths/output/Auto1.wpilib.json", "paths/output/Auto2.wpilib.json", "paths/output/Auto3.wpilib.json"};
     public static Trajectory[] autoGroup1 = new Trajectory[3];
 
     public static Trajectory initializeTrajectory(final String tjson) {

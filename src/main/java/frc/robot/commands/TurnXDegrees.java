@@ -39,7 +39,8 @@ public class TurnXDegrees implements Command {
     }
     private Gear gear;
     private double startAngle;
-    
+    private PIDController turnXControllerR;
+    private PIDController turnXControllerL;
 
     /*
         @param distance     desired distance
@@ -48,9 +49,9 @@ public class TurnXDegrees implements Command {
     */
     public TurnXDegrees(double degrees, double angVel, double angAcc) {
         turnController = new PIDController(
-            DrivetrainConstants.kP, 
-            DrivetrainConstants.kI, 
-            DrivetrainConstants.kD
+            DrivetrainConstants.kPT, 
+            DrivetrainConstants.kIT, 
+            DrivetrainConstants.kDT
         );
         degrees %= 360;
         turnController.setTolerance(5);
@@ -63,7 +64,7 @@ public class TurnXDegrees implements Command {
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
         drivetrain.resetEncoders();
-        //startAngle = RobotContainer.navX.getAngle();
+        startAngle = -RobotContainer.navX.getAngle();
 
     }
 
@@ -83,9 +84,10 @@ public class TurnXDegrees implements Command {
 
         SmartDashboard.putNumber("leftwheel", left);
         SmartDashboard.putNumber("rightwheel", right);
-        // double turn = turnController.calculate(RobotContainer.navX.getAngle() - startAngle, profileCalc.position);
-        // left += turn;
-        // right -= turn;
+
+        double turn = turnController.calculate(-RobotContainer.navX.getAngle() - (startAngle), profileCalc.position);
+        left += turn;
+        right -= turn;
         // left += Drivetrain.LEFT_PID_CONTROLLER.calculate(
         //     RobotContainer.navX.getAngle(), 
         //     profileCalc.position
@@ -94,6 +96,7 @@ public class TurnXDegrees implements Command {
         //     RobotContainer.navX.getAngle(), 
         //     profileCalc.position
         // );
+
         Drivetrain.setOpenLoop(left/ Constants.kMaxVoltage, right / Constants.kMaxVoltage);
         SmartDashboard.putString("TurnXFinishedalt", "No");
         //profile = new TrapezoidProfile(constraints, goal, profileCalc);

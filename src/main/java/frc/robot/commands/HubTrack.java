@@ -45,13 +45,17 @@ public class HubTrack implements Command {
     public void execute() {
         double left, right;
         double turnError = RobotContainer.getXOffset();
-        //double distError = VisionConstants.kYDesired - RobotContainer.getYOffset();
+
         SmartDashboard.putNumber("x off", RobotContainer.getXOffset());
         SmartDashboard.putNumber("y off", RobotContainer.getYOffset());
 
         //if (Math.abs(turnError) < VisionConstants.kTurnTolerance) turnError = 0;
-        //if (distError < VisionConstants.kDistTolerance) distError = 0;
+        
         //double throttle = DIST_PID_CONTROLLER.calculate(distError, 0);
+
+        //double distError = VisionConstants.kYDesired - RobotContainer.getYOffset();
+        //if (distError < VisionConstants.kDistTolerance) distError = 0;
+        
         double turn = TURN_PID_CONTROLLER.calculate(turnError, 0);
         SmartDashboard.putNumber("turn", turn);
         

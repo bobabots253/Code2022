@@ -36,7 +36,7 @@ public class Shoot implements Command {
             this.speed
         );
         SmartDashboard.putNumber("% flywheel", (ff + output) / 12);
-        shooter.setOpenLoop((ff + output) / Constants.kMaxVoltage); //TODO: uncomment
+        //shooter.setOpenLoop((ff + output) / Constants.kMaxVoltage); //TODO: uncomment
     }
     
     @Override
