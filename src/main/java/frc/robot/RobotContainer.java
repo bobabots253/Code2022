@@ -235,26 +235,29 @@ public class RobotContainer {
             //     new HubTrack().withTimeout(3),
             //     new SillyShoot()
             // );
+            
 
-            // auto = new SequentialCommandGroup(
-            //     new ParallelCommandGroup(
-            //         new RunCommand(() -> {
-            //             arm.setOpenLoop(0.05);
-            //             intake.intake(0.9);
-            //             intake.setConveyor(0.3);
-            //         }, arm, intake).withTimeout(4.0)
-            //         .andThen(
-            //             new InstantCommand(() -> {
-            //                 arm.stopArm();
-            //                 intake.stopIntake();
-            //             }, arm, intake)
-            //         ),
-            //         getPathweaverCommand(smallTraj)
-            //     ),
-            //     new TurnXDegrees(150, 100, 75),
-            //     new DriveXMeters(1, 2.0, 1.0)
-            // );
-            auto = new TurnXDegrees(359, 100, 75);
+            auto = new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                    new RunCommand(() -> {
+                        arm.setOpenLoop(0.05);
+                        intake.intake(0.9);
+                        intake.setConveyor(0.3);
+                    }, arm, intake).withTimeout(8.0)
+                    .andThen(
+                        new InstantCommand(() -> {
+                            arm.stopArm();
+                            intake.stopIntake();
+                        }, arm, intake)
+                    ),
+                    new InstantCommand(() -> {
+                        Drivetrain.ODOMETRY.resetPosition(smallTraj.getInitialPose(), navX.getRotation2d());
+                    }, drivetrain),
+                    getPathweaverCommand(smallTraj)
+                )
+            );
+
+            //auto = new TurnXDegrees(359, 100, 75);
             // auto = new InstantCommand();
         } else {
             auto = null;
