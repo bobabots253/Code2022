@@ -59,7 +59,7 @@ public class Arm extends ProfiledPIDSubsystem {
         motor.enableCurrentLimit(true);
         */
         motor.setInverted(false);
-        //motor.burnFlash();
+        motor.burnFlash();
         setGoal(State.STORED);
 
         disable();
