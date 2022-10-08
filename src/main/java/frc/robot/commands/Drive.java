@@ -69,7 +69,7 @@ public class Drive implements Command {
             case CheesyDriveOpenLoop:
                 if (throttle != 0) {
                     throttle *= DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens;
-                    turn *= DrivetrainConstants.kMaxCurvature * DriverConstants.kTurnSens * throttle;
+                    turn *= DrivetrainConstants.kMaxCurvature * DriverConstants.kTurnSens * throttle; 
 
                     DifferentialDriveWheelSpeeds wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
                     wSpeeds.desaturate(DrivetrainConstants.kMaxSpeedMPS);
@@ -119,8 +119,8 @@ public class Drive implements Command {
                 
                 break;
             case TankDrive:
-                left = throttle;
-                right = altThrottle;
+                left = throttle * DriverConstants.kDriveSens;
+                right = altThrottle * DriverConstants.kDriveSens;
                 break;
             default:
                 left = right = 0;

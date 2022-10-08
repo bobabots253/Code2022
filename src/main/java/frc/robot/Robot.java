@@ -57,11 +57,6 @@ public class Robot extends TimedRobot {
     OFFENSE, DEFENSE
   }
   
-  public static Trajectory smallTraj = new Trajectory();
-  private static final String smallJSON = "paths/Small.wpilib.json";
-  
-  private static final String[] auto1JSON = {"paths/Auto1.wpilib.json", "paths/Auto2.wpilib.json", "paths/Auto3.wpilib.json"};
-  public static Trajectory[] autoGroup1 = new Trajectory[3];
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
   private final SendableChooser<Boolean> use_V3 = new SendableChooser<>(); //Use ColorSensorV3 over Photoelectric for conveyor queuing
   private final SendableChooser<TeleopStrat> teleopStrat = new SendableChooser<>();
@@ -71,18 +66,7 @@ public class Robot extends TimedRobot {
     return use_csV3; //prevent unwanted writing operations but allow reading
   }
   
-  public Trajectory initializeTrajectory(final String tjson) {
-    Trajectory t = null;
-    Path tPath = Filesystem.getDeployDirectory().toPath().resolve(tjson);
-    try {
-      t = TrajectoryUtil.fromPathweaverJson(tPath);
-    } catch (IOException e) {
-      System.out.println("silly pathweaver bad");
-      e.printStackTrace();
-      DriverStation.reportError("PATH FAILED", e.getStackTrace());
-    }
-    return t;
-  }
+  
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -112,10 +96,7 @@ public class Robot extends TimedRobot {
       System.out.println("silly pathweaver bad");
       e.printStackTrace();
     }*/
-    smallTraj = initializeTrajectory(smallJSON);
-    for(int i = 0; i < autoGroup1.length; i++) {
-      autoGroup1[i] = initializeTrajectory(auto1JSON[i]);
-    }
+    
     //Arm.getInstance().resetEncoders();
   }
 

@@ -31,10 +31,10 @@ public class Shoot implements Command {
     @Override
     public void execute() {
         double ff = Shooter.FEEDFORWARD.calculate(this.speed);
-        double output = 0;/*Shooter.PID_CONTROLLER.calculate(
+        double output = Shooter.PID_CONTROLLER.calculate(
             Units.RotationsPerMinuteToRadiansPerSecond(Shooter.getShooterVelocity())*ShooterConstants.wheelDiameter/2, 
             this.speed
-        );*/
+        );
         SmartDashboard.putNumber("% flywheel", (ff + output) / 12);
         //shooter.setOpenLoop((ff + output) / Constants.kMaxVoltage); //TODO: uncomment
     }

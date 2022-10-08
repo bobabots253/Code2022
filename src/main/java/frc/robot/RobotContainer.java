@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -26,6 +28,7 @@ import frc.robot.commands.CargoTrack;
 import frc.robot.commands.ConveyorQueue;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.SPI.Port;
@@ -37,6 +40,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -55,6 +59,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -105,8 +110,15 @@ public class RobotContainer {
         drivetrain.resetEncoders();
 
         bindOI();
+        initTrajectories();
     }
     
+    private void initTrajectories() {
+        smallTraj = initializeTrajectory(smallJSON);
+        for(int i = 0; i < autoGroup1.length; i++) {
+        autoGroup1[i] = initializeTrajectory(auto1JSON[i]);
+        }
+    }
 
     private void bindOI() {
         driver_RB.whenHeld(new RunCommand(() -> arm.setOpenLoop(0.05), arm).withTimeout(1.7))
@@ -150,14 +162,21 @@ public class RobotContainer {
         //driver_LB.whileHeld(new SillyShoot());
         driver_X.whileHeld(new HubTrack());
 
-        for(JoystickButton button : Set.of(driver_B, operator_X)) { //TODO: investigate inverted arm actuation
-            button.whenHeld(new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1.7)) //Can reimplement with StartEndCommand
-                .whileHeld(new RunCommand(() -> intake.intake(-0.7), intake)
-                    .alongWith(new RunCommand(() -> intake.setConveyor(-0.3)))
-                    .alongWith(new RunCommand(() -> shooter.setStagingMotor(-0.2))))
-                .whenReleased(new InstantCommand(() -> intake.stopIntake())
-                    .alongWith(new RunCommand(() -> Arm.getInstance().setOpenLoop(-0.05), Arm.getInstance()).withTimeout(1.7).andThen(arm::stopArm, arm))
-                    .alongWith(new RunCommand(() -> shooter.setStagingMotor(0.0))));
+        for(JoystickButton button : Set.of(driver_B, operator_X)) { 
+            button.whenHeld(new RunCommand(() -> arm.setOpenLoop(0.05), arm)
+                .alongWith(
+                    new RunCommand(() -> intake.intake(0.95), intake).withTimeout(0.3)
+                    .andThen(new RunCommand(() -> intake.intake(0), intake).withTimeout(0.15))
+                    .andThen(new RunCommand(() -> {
+                        intake.intake(-0.7);
+                        intake.setConveyor(-0.3);
+                    }, intake))
+                )
+            )
+            .whenReleased(
+                new InstantCommand(intake::stopIntake, intake)
+                .alongWith(new StartEndCommand(() -> arm.setOpenLoop(-0.05), arm::stopArm, arm).withTimeout(1.7))
+            );
         }
         
 
@@ -230,7 +249,7 @@ public class RobotContainer {
                 new HubTrack().withTimeout(3),
                 new SillyShoot()
             );*/
-            auto = null;
+            auto = new InstantCommand();
         } else {
             auto = null;
         }
@@ -241,6 +260,25 @@ public class RobotContainer {
         if(instance == null) instance = new RobotContainer();
         return instance;
     }
+
+    
+    public static Trajectory smallTraj = new Trajectory();
+    private static final String smallJSON = "paths/Small.wpilib.json";
+    private static final String[] auto1JSON = {"paths/Auto1.wpilib.json", "paths/Auto2.wpilib.json", "paths/Auto3.wpilib.json"};
+    public static Trajectory[] autoGroup1 = new Trajectory[3];
+
+    public static Trajectory initializeTrajectory(final String tjson) {
+        Trajectory t = null;
+        Path tPath = Filesystem.getDeployDirectory().toPath().resolve(tjson);
+        try {
+          t = TrajectoryUtil.fromPathweaverJson(tPath);
+        } catch (IOException e) {
+          System.out.println("silly pathweaver bad");
+          e.printStackTrace();
+          DriverStation.reportError("PATH FAILED", e.getStackTrace());
+        }
+        return t;
+      }
 
     /*
         @param trajectory: the trajectory to follow
@@ -282,7 +320,7 @@ public class RobotContainer {
         Drivetrain.ODOMETRY.resetPosition(trajectory.getInitialPose(), navX.getRotation2d());
 
         // Run path following command, then stop at the end.
-        return ramseteCommand.andThen(() -> Drivetrain.setOpenLoop(0, 0));
+        return new InstantCommand(() -> Drivetrain.ODOMETRY.resetPosition(trajectory.getInitialPose(), navX.getRotation2d())).andThen(ramseteCommand.andThen(() -> Drivetrain.setOpenLoop(0, 0)));
     }
 
      /**
