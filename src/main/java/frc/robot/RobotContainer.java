@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.function.BiConsumer;
 
-import frc.robot.Constants;
+import frc.robot.Constants.*;
 import frc.robot.Autonomous.Auto;
 import frc.robot.Autonomous.Auto.Selection;
 import frc.robot.Constants.AutoConstants;
@@ -122,6 +122,21 @@ public class RobotContainer {
                 intake.setConveyor(0.3);
             }, intake)).withTimeout(1.2)
             .andThen(arm::stopArm, arm).andThen(intake::stopIntake));
+
+
+        operator_RB.whenHeld(new RunCommand(() -> arm.setOpenLoop(0.05), arm).withTimeout(1.7))
+        .whileHeld(new RunCommand(() -> {
+            intake.intake(0.95);
+            intake.setConveyor(0.3);
+        }, intake))
+        .whenReleased(new RunCommand(() -> {
+            arm.setOpenLoop(-0.05);
+            // intake.intake(0.7);
+        }, arm, intake).withTimeout(0.5).andThen(new RunCommand(() ->{
+            intake.intake(0.0);
+            intake.setConveyor(0.3);
+        }, intake)).withTimeout(1.2)
+        .andThen(arm::stopArm, arm).andThen(intake::stopIntake));
         
         driver_Y.whenHeld(new RunCommand(() -> arm.setOpenLoop(-0.05), arm).withTimeout(1.7))
             .whileHeld(new RunCommand(() -> {
@@ -162,8 +177,8 @@ public class RobotContainer {
         //operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climb(-0.5), climber)).whenReleased(new InstantCommand(() -> climber.stop()));
         operator_DPAD_LEFT.whileHeld(new RunCommand(() -> arm.setOpenLoop(0.06), arm)).whenReleased(new InstantCommand(()->arm.setOpenLoop(0.0)));
         operator_DPAD_RIGHT.whileHeld(new RunCommand(() -> arm.setOpenLoop(-0.06), arm)).whenReleased(new InstantCommand(()->arm.setOpenLoop(0.0)));
-        operator_VIEW.whileHeld(new RunCommand(() -> climber.setLeftMotor(0.3), climber)).whenReleased(climber::stop, climber);
-        operator_MENU.whileHeld(new RunCommand(() -> climber.setRightMotor(0.3), climber)).whenReleased(climber::stop, climber);
+        operator_VIEW.whileHeld(new RunCommand(() -> climber.setLeftMotor(-ClimbConstants.climbSens), climber)).whenReleased(climber::stop, climber);
+        operator_MENU.whileHeld(new RunCommand(() -> climber.setLeftMotor(ClimbConstants.climbSens), climber)).whenReleased(climber::stop, climber);
     }
 
     public static Command getAutonomousCommand(Auto.Selection selectedAuto) { //TODO: change auto based on selected strategy

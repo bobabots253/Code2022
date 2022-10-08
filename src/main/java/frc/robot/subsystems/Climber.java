@@ -8,10 +8,10 @@ import frc.robot.Util;
 import frc.robot.Constants.ClimbConstants;
 
 public class Climber implements Subsystem {
-    private static TalonFX right = Util.createTalonFX(ClimbConstants.rightMotor), left = Util.createTalonFX(ClimbConstants.leftMotor);
+    private static TalonFX /*right = Util.createTalonFX(ClimbConstants.rightMotor),*/ left = Util.createTalonFX(ClimbConstants.leftMotor);
     private static Climber instance = null;
     private Climber() {
-        right.setInverted(false);
+        // right.setInverted(false);
         left.setInverted(false);
         register();
     }
@@ -30,7 +30,7 @@ public class Climber implements Subsystem {
     }
 
     public void setRightMotor(double value) {
-        right.set(ControlMode.PercentOutput, value);
+        // right.set(ControlMode.PercentOutput, value);
     }
 
     public void climb(double value) {

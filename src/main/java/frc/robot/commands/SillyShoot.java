@@ -5,12 +5,13 @@ import java.util.Set;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 public class SillyShoot implements Command {
     private Subsystem[] requirements = {Shooter.getInstance(), Intake.getInstance()};
-    static final double defaultSpeed = 0.65;
+    static final double defaultSpeed = ShooterConstants.flywheelSpeed;
     Timer encoderFallback;
     private double percentPower;
     

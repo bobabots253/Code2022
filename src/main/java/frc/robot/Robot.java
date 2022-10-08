@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.RobotContainer;
 import frc.robot.Autonomous.Auto;
 import frc.robot.Constants.DriverConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.RobotContainer.LEDMode;
 import frc.robot.commands.CargoTrack;
 import frc.robot.commands.Drive;
@@ -187,7 +188,10 @@ public class Robot extends TimedRobot {
     if(useFeedForward.getSelected()) {
       Shooter.getInstance().setDefaultCommand(new Shoot(18.965));
     } else {
-      Shooter.getInstance().setDefaultCommand(new RunCommand(() -> Shooter.getInstance().setOpenLoop(.65), Shooter.getInstance()));
+      Shooter.getInstance().setDefaultCommand(
+        new RunCommand(() -> Shooter.getInstance().setOpenLoop(ShooterConstants.flywheelSpeed), 
+        Shooter.getInstance())
+      );
     }
   }
 

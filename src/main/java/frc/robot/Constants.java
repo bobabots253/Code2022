@@ -14,7 +14,7 @@ public class Constants {
     public static final double kMaxVoltage = 12.0;
 
     public static class InputPorts {
-        public static final int driverController = 0, operatorController = 1;
+        public static final int driverController = 1, operatorController = 0;
     }
 
     public static class AutoConstants {
@@ -109,6 +109,7 @@ public class Constants {
         public static double kTolerance = 0;
         public static int master = 1;
         public static int slave = 10;
+        public static double flywheelSpeed = 0.64; // 65
     }
     public static class ConveyorConstants {
         public static final int conveyorMotor = 5;// change to roller motor
@@ -120,8 +121,8 @@ public class Constants {
 
     }
     public static class ClimbConstants {
-        public static final int rightMotor = 5, leftMotor = 6; 
-        public static final double climbSens = 1.0;
+        public static final int rightMotor = 6, leftMotor = 5; 
+        public static final double climbSens = 0.7;
         //Shaft diameter: 0.5in
         /* PID constants */
         public static final double kP = 0;
